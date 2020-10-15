@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Olx</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="open_camera">Camera</string>
+    <string name="open_Gallery">Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="option_to_select">Select by</string>
+    <string name="enter_your_email">Please Enter Your email</string>
+    <string name="enter_your_password">Please enter your password</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >8 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="signup">Sign up</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="sign_up">Sign up</string>
+    <string name="remember_me">Remember me</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="phone">Phone</string>
+</resources>

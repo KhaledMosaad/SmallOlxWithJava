@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:background="@color/screen_background_color">
+<RelativeLayout android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <ImageView
+        android:layout_width="131dp"
+        android:layout_height="116dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/add_image"
+        android:id="@+id/addimgsingup"
+        android:layout_marginTop="50dp"/>
+
+    <EditText
+        android:gravity="center"
+        android:id="@+id/emaileditsignup"
+        style="@android:style/TextAppearance.Medium"
+        android:layout_width="274dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addimgsingup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_fields"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:maxLines="2"
+        android:paddingVertical="15dp" />
+
+    <EditText
+        android:gravity="center"
+        android:id="@+id/passwordeditsignup"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emaileditsignup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_fields"
+        android:hint="@string/password"
+        android:inputType="numberPassword"
+        android:maxLines="1"
+        android:paddingVertical="15dp" />
+    <EditText
+        android:gravity="center"
+        android:layout_below="@id/passwordeditsignup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_fields"
+        android:id="@+id/confermpass"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/confirm_password"
+        android:inputType="numberPassword"
+        android:maxLines="1"
+        android:paddingVertical="15dp"
+        />
+    <EditText
+        android:gravity="center"
+        android:layout_below="@id/confermpass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/rounded_fields"
+        android:id="@+id/phone"
+        android:layout_width="268dp"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:hint="@string/phone"
+        android:inputType="phone"
+        android:paddingVertical="15dp"
+        />
+    <Button
+        android:layout_width="142dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/rounded_corners"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:id="@+id/signupbtnsignup"
+        android:layout_below="@id/phone"
+        android:layout_centerHorizontal="true"
+        />
+</RelativeLayout>
+</ScrollView>
