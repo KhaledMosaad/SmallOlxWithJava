@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         {
             emailedit.setError(null);
             passwordedit.setError(null);
-            //TODO logic after Create home page
+
         }
     }
     private void initialize()

@@ -6,23 +6,24 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Camera;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.khalid.olx.R;
+import com.khalid.olx.ui.DataBase.users.User;
 
 public class SignupActivity extends AppCompatActivity {
     private ImageView addimg;
@@ -31,8 +32,9 @@ public class SignupActivity extends AppCompatActivity {
     private static final int STORAGE_CODE=700;
     private static final int CAMERA_CODE=800;
     private static final int OPEN_GALLERY_CODE=900;
-    private static final int TAKE_PHOTO_CODE=900;
+    private static final int TAKE_PHOTO_CODE=1000;
     private String imgURI;
+    private boolean isimgadd=false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,12 +52,58 @@ public class SignupActivity extends AppCompatActivity {
         phonerdit=findViewById(R.id.phone);
         signup=findViewById(R.id.signupbtnsignup);
     }
+    private void fetchDatafromUser(){
+    }
     private void setListener()
     {
         addimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMenuToChoose();
+            }
+        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String email=emailedit.getText().toString();
+                final String password=passwordedit.getText().toString();
+                final String confpassword=confpasswordedit.getText().toString();
+                final String phone=phonerdit.getText().toString();
+
+                if(TextUtils.isEmpty(email))
+                {
+                    emailedit.setError("Please Enter Your Email");
+                }
+                else if(TextUtils.isEmpty(password))
+                {
+                    passwordedit.setError("Please Enter Password");
+                }
+                else if(TextUtils.isEmpty(confpassword))
+                {
+                    confpasswordedit.setError("Confirm Your Password");
+                }
+                else if(!password.equals(confpassword))
+                {
+                    confpasswordedit.setError("The Password not equal each other");
+                }
+                else if(TextUtils.isEmpty(phone))
+                {
+                    phonerdit.setError("Please Enter Your phone number");
+                }
+                else if(!isimgadd)
+                {
+                    char phot=email.charAt(0);
+                    TextDrawable drawable = TextDrawable.builder()
+                            .buildRect(String.valueOf(phot),Color.RED);
+                    addimg.setImageDrawable(drawable);
+                }
+                else
+                {
+                    Intent intent=new Intent(SignupActivity.this,HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         });
     }
@@ -84,8 +132,10 @@ public class SignupActivity extends AppCompatActivity {
     }
     private void openGallery()
     {
-        if(ContextCompat.checkSelfPermission(this,Manifest.permission.READ_EXTERNAL_STORAGE)!=
-                PackageManager.PERMISSION_GRANTED||ContextCompat.checkSelfPermission(this,
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.
+                READ_EXTERNAL_STORAGE)!=
+                PackageManager.PERMISSION_GRANTED||ContextCompat.
+                checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED)
         {
@@ -105,7 +155,6 @@ public class SignupActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.CAMERA},CAMERA_CODE);
-
         }
         else
         {
@@ -119,24 +168,28 @@ public class SignupActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==CAMERA_CODE)
         {
-            Bitmap img=(Bitmap) data.getExtras().get("data");
-            if(img!=null)
-            {
-                addimg.setImageBitmap(img);
+            if(resultCode==RESULT_OK) {
+                Bitmap img = (Bitmap) data.getExtras().get("data");
+                if (img != null) {
+                    addimg.setImageBitmap(img);
+                    isimgadd = true;
+                }
             }
-            else
-            {
-                Toast.makeText(SignupActivity.this,"Please Choose photo",
+            else {
+                Toast.makeText(SignupActivity.this, "Please Choose photo",
                         Toast.LENGTH_LONG).show();
+
             }
         }
         else if(resultCode== OPEN_GALLERY_CODE)
         {
-            Uri img=(Uri) data.getData();
-            if(img!=null)
-            {
-                imgURI=img.toString();
-                addimg.setImageURI(img);
+            if(resultCode==RESULT_OK) {
+                Uri img = (Uri) data.getData();
+                if (img != null) {
+                    imgURI = img.toString();
+                    addimg.setImageURI(img);
+                    isimgadd = true;
+                }
             }
             else
             {
@@ -144,4 +197,6 @@ public class SignupActivity extends AppCompatActivity {
             }
         }
     }
+   // User user=new User();
+
 }

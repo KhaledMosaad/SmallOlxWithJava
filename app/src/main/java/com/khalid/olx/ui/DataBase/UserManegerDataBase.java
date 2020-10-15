@@ -12,6 +12,6 @@ import com.khalid.olx.ui.DataBase.users.UserDAO;
 @Database(entities = {User.class, Post.class},version = 1)
 public abstract class UserManegerDataBase extends RoomDatabase {
     public abstract UserDAO userDAO();
-
+    
     public abstract PostsDAO postsDAO();
 }

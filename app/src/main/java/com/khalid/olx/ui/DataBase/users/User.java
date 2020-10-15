@@ -21,5 +21,5 @@ public class User {
 
     public String photoPath;
 
-    public List<Post> userPosts;
+    //public List<Post> userPosts;
 }
