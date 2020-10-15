@@ -123,11 +123,10 @@ public class SignupActivity extends AppCompatActivity {
             if(img!=null)
             {
                 addimg.setImageBitmap(img);
-
             }
             else
             {
-                Toast.makeText(SignupActivity.this,"Please Choose anther photo",
+                Toast.makeText(SignupActivity.this,"Please Choose photo",
                         Toast.LENGTH_LONG).show();
             }
         }
@@ -138,6 +137,10 @@ public class SignupActivity extends AppCompatActivity {
             {
                 imgURI=img.toString();
                 addimg.setImageURI(img);
+            }
+            else
+            {
+                Toast.makeText(this,"Please Select Photo",Toast.LENGTH_LONG).show();
             }
         }
     }
