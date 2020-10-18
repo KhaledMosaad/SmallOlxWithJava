@@ -15,20 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.khalid.olx.R;
 import com.khalid.olx.ui.DataBase.Posts.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PostsAdabter extends RecyclerView.Adapter<PostsAdabter.ViewHolder> {
 
     private List<Post> postslist;
+    public PostsAdabter(List<Post> postlist){
+        this.postslist=postlist;
+    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context=parent.getContext();
-        LayoutInflater inflater=LayoutInflater.from(context);
-        View postView=inflater.inflate(R.layout.home_activity,null,false);
-        ViewHolder viewHolder=new ViewHolder(postView);
-        return viewHolder;
+        View postView=LayoutInflater.from(parent.getContext()).inflate(R.layout.home_activity,
+                parent,false);
+        return new ViewHolder(postView);
     }
 
     @Override
@@ -39,7 +41,6 @@ public class PostsAdabter extends RecyclerView.Adapter<PostsAdabter.ViewHolder> 
         holder.postImage.setImageURI(postimg);
         Uri userimg=Uri.parse(Uri.decode(postslist.get(position).userImg));
         holder.userImage.setImageURI(userimg);
-
         holder.holePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,11 +63,11 @@ public class PostsAdabter extends RecyclerView.Adapter<PostsAdabter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            postImage=(ImageView) itemView.findViewById(R.id.postimage);
-            userImage=(ImageView) itemView.findViewById(R.id.userimg);
-            postName=(TextView) itemView.findViewById(R.id.postname);
-            price=(TextView) itemView.findViewById(R.id.demotext);
-            holePost=(ConstraintLayout) itemView.findViewById(R.id.postitem);
+            postImage= itemView.findViewById(R.id.postimage);
+            userImage= itemView.findViewById(R.id.userimg);
+            postName= itemView.findViewById(R.id.postname);
+            price= itemView.findViewById(R.id.demotext);
+            holePost= itemView.findViewById(R.id.postitemcontainer);
         }
     }
 }
