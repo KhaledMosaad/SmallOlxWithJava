@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -15,52 +14,46 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.khalid.olx.R;
-import com.khalid.olx.ui.DataBase.PostsDatabaseClint;
 import com.khalid.olx.ui.DataBase.users.User;
 
-public  class SignupActivity extends AppCompatActivity {
-    private ImageView addimg;
-    private EditText emailedit,passwordedit,confpasswordedit,phonerdit;
-    private Button signup;
+import java.util.Objects;
+
+public class AddpostActivity extends AppCompatActivity {
+
+    private ImageView addimage;
+    private EditText name;
+    private EditText price;
+    private EditText details;
+    private Button addbtn;
     private static final int STORAGE_CODE=700;
     private static final int CAMERA_CODE=800;
     private static final int OPEN_GALLERY_CODE=900;
     private static final int TAKE_PHOTO_CODE=1000;
     private String imgURI;
     private boolean isimgadd=false;
-    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signup_activity);
-        initialize();
-        setListener();
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setSignup();
-            }
-        });
+        setContentView(R.layout.add_post_activity);
+
+        addimage=findViewById(R.id.addimgpost);
+        name=findViewById(R.id.nameaddpost);
+        price=findViewById(R.id.priceaddpost);
+        details=findViewById(R.id.detailsaddpost);
+        addbtn=findViewById(R.id.addpostbtn);
+        setPost();
+        onClickListners();
     }
-    private void initialize()
-    {
-        addimg=findViewById(R.id.addimgsingup);
-        emailedit=findViewById(R.id.emaileditsignup);
-        passwordedit=findViewById(R.id.passwordeditsignup);
-        confpasswordedit=findViewById(R.id.confermpass);
-        phonerdit=findViewById(R.id.phone);
-        signup=findViewById(R.id.signupbtnsignup);
-    }
-    private void setListener()
-    {
-        addimg.setOnClickListener(new View.OnClickListener() {
+    private void onClickListners(){
+        addimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMenuToChoose();
@@ -68,51 +61,36 @@ public  class SignupActivity extends AppCompatActivity {
         });
 
     }
-    void setSignup(){
-        final String email=emailedit.getText().toString();
-        final String password=passwordedit.getText().toString();
-        final String confpassword=confpasswordedit.getText().toString();
-        final String phone=phonerdit.getText().toString();
+    void setPost(){
+        final String setname=name.getText().toString();
+        final String setprice=price.getText().toString();
+        final String setDetails=details.getText().toString();
 
-        if(TextUtils.isEmpty(email))
+        if(TextUtils.isEmpty(setname))
         {
-            emailedit.setError("Please Enter Your Email");
+            name.setError("Please Enter Name");
         }
-        else if(TextUtils.isEmpty(password))
+        else if(TextUtils.isEmpty(setprice))
         {
-            passwordedit.setError("Please Enter Password");
+            price.setError("Please Enter Price");
         }
-        else if(TextUtils.isEmpty(confpassword))
+        else if(TextUtils.isEmpty(setDetails))
         {
-            confpasswordedit.setError("Confirm Your Password");
-        }
-        else if(!password.equals(confpassword))
-        {
-            confpasswordedit.setError("The Password not equal each other");
-        }
-        else if(TextUtils.isEmpty(phone))
-        {
-            phonerdit.setError("Please Enter Your phone number");
+            details.setError("Details can't be empty");
         }
         else if(!isimgadd)
         {
-            Toast.makeText(SignupActivity.this,"Please Set a photo",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddpostActivity.this,"Please Set a photo",Toast.LENGTH_LONG).show();
         }
         else {
-            user=new User();
-            user.email=email;
-            user.password=password;
-            user.phone=phone;
-            user.photoPath=imgURI;
-
-            new UserAsyncTask().execute();
+            //TODO add post into list
         }
     }
     private void openMenuToChoose()
     {
         final CharSequence[] options={getString(R.string.open_camera),
                 getString(R.string.open_Gallery),getString(R.string.cancel)};
-        AlertDialog.Builder alertDialog=new AlertDialog.Builder(SignupActivity.this);
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(AddpostActivity.this);
         alertDialog.setTitle(getString(R.string.option_to_select));
         alertDialog.setItems(options,new DialogInterface.OnClickListener(){
 
@@ -133,10 +111,10 @@ public  class SignupActivity extends AppCompatActivity {
     }
     private void openGallery()
     {
-        if(ContextCompat.checkSelfPermission(SignupActivity.this, Manifest.permission.
+        if(ContextCompat.checkSelfPermission(AddpostActivity.this, Manifest.permission.
                 READ_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED||ContextCompat.
-                checkSelfPermission(SignupActivity.this,
+                checkSelfPermission(AddpostActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED)
         {
@@ -152,7 +130,7 @@ public  class SignupActivity extends AppCompatActivity {
     }
     private void openCamera()
     {
-        if(ContextCompat.checkSelfPermission(SignupActivity.this,Manifest.permission.CAMERA)!=
+        if(ContextCompat.checkSelfPermission(AddpostActivity.this,Manifest.permission.CAMERA)!=
                 PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.CAMERA},CAMERA_CODE);
@@ -171,14 +149,14 @@ public  class SignupActivity extends AppCompatActivity {
         {
             if(resultCode==RESULT_OK) {
                 assert data != null;
-                Bitmap img = (Bitmap) data.getExtras().get("data");
+                Bitmap img = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
                 if (img != null) {
-                    addimg.setImageBitmap(img);
+                    addimage.setImageBitmap(img);
                     isimgadd = true;
                 }
             }
             else {
-                Toast.makeText(SignupActivity.this, "Please Choose photo",
+                Toast.makeText(AddpostActivity.this, "Please Choose photo",
                         Toast.LENGTH_LONG).show();
 
             }
@@ -190,7 +168,7 @@ public  class SignupActivity extends AppCompatActivity {
                 Uri img = data.getData();
                 if (img != null) {
                     imgURI = img.toString();
-                    addimg.setImageURI(img);
+                    addimage.setImageURI(img);
                     isimgadd = true;
                 }
             }
@@ -200,25 +178,4 @@ public  class SignupActivity extends AppCompatActivity {
             }
         }
     }
-
-    public class UserAsyncTask extends AsyncTask<Void,Void,Void>{
-
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            PostsDatabaseClint.getInstance(getApplicationContext())
-                    .getUserManegerDataBase().userDAO().insertUser(user);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            Intent intent=new Intent(SignupActivity.this,HomeActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-
 }

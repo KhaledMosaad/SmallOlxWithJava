@@ -19,7 +19,7 @@ public class PostsDatabaseClint {
 
     public static synchronized PostsDatabaseClint getInstance(Context context)
     {
-        if(postsDatabaseClint!=null)
+        if(postsDatabaseClint==null)
         {
             postsDatabaseClint=new PostsDatabaseClint(context);
         }

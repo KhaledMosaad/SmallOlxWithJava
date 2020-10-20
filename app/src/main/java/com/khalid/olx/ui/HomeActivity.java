@@ -1,10 +1,12 @@
 package com.khalid.olx.ui;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButton;
     private TextView nopost;
     private List<Post> postList;
+    private final static int ADD_POST_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,18 +36,17 @@ public class HomeActivity extends AppCompatActivity {
         nopost=findViewById(R.id.nopostid);
         postsRV.setLayoutManager(new LinearLayoutManager(this));
 
+       GetPostAsyncTask getPostAsyncTask=new GetPostAsyncTask();
+       getPostAsyncTask.execute();
 
-        PostsAdabter postsAdabter=new PostsAdabter(postList);
-        postsRV.setAdapter(postsAdabter);
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Post details screen
+                Intent intent=new Intent(HomeActivity.this,AddpostActivity.class);
+                startActivityForResult(intent,ADD_POST_REQUEST_CODE);
             }
         });
-       GetPostAsyncTask getPostAsyncTask=new GetPostAsyncTask();
-       getPostAsyncTask.execute();
     }
     class GetPostAsyncTask extends AsyncTask<Void, List<Post> , List<Post>>
     {
