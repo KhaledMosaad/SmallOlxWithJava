@@ -9,7 +9,7 @@ import com.khalid.olx.ui.DataBase.Posts.PostsDAO;
 import com.khalid.olx.ui.DataBase.users.User;
 import com.khalid.olx.ui.DataBase.users.UserDAO;
 
-@Database(entities = {User.class, Post.class},version = 1)
+@Database(entities = {User.class, Post.class},version = 2)
 public abstract class UserManegerDataBase extends RoomDatabase {
     public abstract UserDAO userDAO();
     

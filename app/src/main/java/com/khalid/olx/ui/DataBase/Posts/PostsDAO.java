@@ -12,8 +12,10 @@ public interface PostsDAO {
     @Query("SELECT * FROM post")
     List<Post> getAllPost();
 
+
     @Insert
     void insertPost(Post post);
+
 
     @Delete
     void deletePost(Post post);

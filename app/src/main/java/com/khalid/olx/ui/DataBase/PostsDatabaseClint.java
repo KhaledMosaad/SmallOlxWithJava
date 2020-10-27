@@ -14,7 +14,8 @@ public class PostsDatabaseClint {
     private PostsDatabaseClint(Context context){
         this.context=context;
         userManegerDataBase= Room.databaseBuilder(context,
-                UserManegerDataBase.class,DATABASE_NAME).build();
+                UserManegerDataBase.class,DATABASE_NAME).
+                fallbackToDestructiveMigration().build();
     }
 
     public static synchronized PostsDatabaseClint getInstance(Context context)

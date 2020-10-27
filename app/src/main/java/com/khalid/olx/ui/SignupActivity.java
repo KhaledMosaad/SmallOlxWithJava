@@ -4,10 +4,12 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,22 +21,33 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import com.khalid.olx.BuildConfig;
 import com.khalid.olx.R;
 import com.khalid.olx.ui.DataBase.PostsDatabaseClint;
 import com.khalid.olx.ui.DataBase.users.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public  class SignupActivity extends AppCompatActivity {
-    private ImageView addimg;
+    private ImageView mImageView;
     private EditText emailedit,passwordedit,confpasswordedit,phonerdit;
-    private Button signup;
+    private Button mSignupBtn;
     private static final int STORAGE_CODE=700;
     private static final int CAMERA_CODE=800;
     private static final int OPEN_GALLERY_CODE=900;
     private static final int TAKE_PHOTO_CODE=1000;
-    private String imgURI;
-    private boolean isimgadd=false;
+    private String mImagePath;
+    private boolean mIsImageAdd =false;
     private User user;
+    private File mPhotoFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +55,7 @@ public  class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.signup_activity);
         initialize();
         setListener();
-        signup.setOnClickListener(new View.OnClickListener() {
+        mSignupBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setSignup();
@@ -51,16 +64,16 @@ public  class SignupActivity extends AppCompatActivity {
     }
     private void initialize()
     {
-        addimg=findViewById(R.id.addimgsingup);
+        mImageView =findViewById(R.id.addimgsingup);
         emailedit=findViewById(R.id.emaileditsignup);
         passwordedit=findViewById(R.id.passwordeditsignup);
         confpasswordedit=findViewById(R.id.confermpass);
         phonerdit=findViewById(R.id.phone);
-        signup=findViewById(R.id.signupbtnsignup);
+        mSignupBtn =findViewById(R.id.signupbtnsignup);
     }
     private void setListener()
     {
-        addimg.setOnClickListener(new View.OnClickListener() {
+        mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMenuToChoose();
@@ -94,7 +107,7 @@ public  class SignupActivity extends AppCompatActivity {
         {
             phonerdit.setError("Please Enter Your phone number");
         }
-        else if(!isimgadd)
+        else if(!mIsImageAdd)
         {
             Toast.makeText(SignupActivity.this,"Please Set a photo",Toast.LENGTH_LONG).show();
         }
@@ -103,11 +116,18 @@ public  class SignupActivity extends AppCompatActivity {
             user.email=email;
             user.password=password;
             user.phone=phone;
-            user.photoPath=imgURI;
+            user.photoPath= mImagePath;
 
             new UserAsyncTask().execute();
         }
     }
+
+
+
+
+
+
+
     private void openMenuToChoose()
     {
         final CharSequence[] options={getString(R.string.open_camera),
@@ -125,7 +145,11 @@ public  class SignupActivity extends AppCompatActivity {
                 }
                 else if(options[which].equals(getString(R.string.open_camera)))
                 {
-                    openCamera();
+                    try {
+                        openCamera();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -150,8 +174,7 @@ public  class SignupActivity extends AppCompatActivity {
             startActivityForResult(openGalleryIntent,OPEN_GALLERY_CODE);
         }
     }
-    private void openCamera()
-    {
+    private void openCamera() throws IOException {
         if(ContextCompat.checkSelfPermission(SignupActivity.this,Manifest.permission.CAMERA)!=
                 PackageManager.PERMISSION_GRANTED)
         {
@@ -159,29 +182,65 @@ public  class SignupActivity extends AppCompatActivity {
         }
         else
         {
-            Intent openCameraIntent=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(openCameraIntent,TAKE_PHOTO_CODE);
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                mPhotoFile = null;
+                try {
+                    mPhotoFile = createImageFile();
+                } catch (IOException ex) {
+                    // Error occurred while creating the File
+                    return;
+                }
+                // Continue only if the File was successfully created
+                if (mPhotoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(SignupActivity.this,
+                            BuildConfig.APPLICATION_ID + ".provider",
+                            createImageFile());
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(takePictureIntent, TAKE_PHOTO_CODE);
+                }
+            }
         }
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        mImagePath = image.getAbsolutePath();
+        return image;
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==TAKE_PHOTO_CODE)
-        {
-            if(resultCode==RESULT_OK) {
-                assert data != null;
-                Bitmap img = (Bitmap) data.getExtras().get("data");
-                if (img != null) {
-                    addimg.setImageBitmap(img);
-                    isimgadd = true;
-                }
+        if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
+            // Show the thumbnail on ImageView
+            Uri imageUri = Uri.parse(mImagePath);
+            File file = new File(imageUri.getPath());
+            try {
+                InputStream ims = new FileInputStream(file);
+                mImageView.setImageBitmap(BitmapFactory.decodeStream(ims));
+                mIsImageAdd=true;
+            } catch (FileNotFoundException e) {
+                return;
             }
-            else {
-                Toast.makeText(SignupActivity.this, "Please Choose photo",
-                        Toast.LENGTH_LONG).show();
 
-            }
+            // ScanFile so it will be appeared on Gallery
+            MediaScannerConnection.scanFile(SignupActivity.this,
+                    new String[]{imageUri.getPath()}, null,
+                    new MediaScannerConnection.OnScanCompletedListener() {
+                        public void onScanCompleted(String path, Uri uri) {
+                        }
+                    });
         }
         else if(requestCode== OPEN_GALLERY_CODE)
         {
@@ -189,9 +248,9 @@ public  class SignupActivity extends AppCompatActivity {
                 assert data != null;
                 Uri img = data.getData();
                 if (img != null) {
-                    imgURI = img.toString();
-                    addimg.setImageURI(img);
-                    isimgadd = true;
+                    mImagePath = img.toString();
+                    mImageView.setImageURI(img);
+                    mIsImageAdd = true;
                 }
             }
             else

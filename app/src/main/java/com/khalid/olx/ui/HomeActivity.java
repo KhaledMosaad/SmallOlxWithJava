@@ -26,6 +26,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView nopost;
     private List<Post> postList;
     private final static int ADD_POST_REQUEST_CODE = 100;
+    private String email;
+    private String password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,9 +38,10 @@ public class HomeActivity extends AppCompatActivity {
         nopost=findViewById(R.id.nopostid);
         postsRV.setLayoutManager(new LinearLayoutManager(this));
 
-       GetPostAsyncTask getPostAsyncTask=new GetPostAsyncTask();
-       getPostAsyncTask.execute();
 
+       Intent getintent=getIntent();
+       email=getintent.getStringExtra("email");
+       password=getintent.getStringExtra("password");
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,23 +50,40 @@ public class HomeActivity extends AppCompatActivity {
                 startActivityForResult(intent,ADD_POST_REQUEST_CODE);
             }
         });
+        GetPostAsyncTask getPostAsyncTask=new GetPostAsyncTask();
+        getPostAsyncTask.execute();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==ADD_POST_REQUEST_CODE)
+        {
+            if(resultCode==RESULT_OK)
+            {
+                new GetPostAsyncTask().execute();
+            }
+        }
+    }
+
     class GetPostAsyncTask extends AsyncTask<Void, List<Post> , List<Post>>
     {
 
         @Override
         protected List<Post> doInBackground(Void... voids) {
-            return PostsDatabaseClint.getInstance(getApplicationContext())
+
+            postList=PostsDatabaseClint.getInstance(getApplicationContext())
                     .getUserManegerDataBase().postsDAO().getAllPost();
+            return postList;
         }
 
         @Override
         protected void onPostExecute(List<Post> posts) {
             super.onPostExecute(posts);
-            if(postList!=null&&postList.size()>0)
+            if(posts!=null&&posts.size()>0)
             {
                 nopost.setVisibility(View.GONE);
-                PostsAdabter postsAdabter=new PostsAdabter(postList);
+                PostsAdabter postsAdabter=new PostsAdabter(posts);
                 postsRV.setAdapter(postsAdabter);
             }
             else

@@ -6,12 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/screen_background_color"
+    android:layout_gravity="center_horizontal"
     >
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/postsRV"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,20 +21,19 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
+        android:id="@+id/nopostid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_post_right_now"
         android:gravity="center_vertical"
+        android:text="@string/no_post_right_now"
         android:textColor="@color/colorWhite"
-        android:id="@+id/nopostid"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:textSize="25sp"
-        android:visibility="gone"
         android:textStyle="bold"
-        />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addpostbtn"
@@ -44,6 +44,6 @@
         android:background="@drawable/ic_add"
         android:layout_marginBottom="15dp"
         android:layout_marginEnd="15dp"
-        />
+        android:contentDescription="TODO" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

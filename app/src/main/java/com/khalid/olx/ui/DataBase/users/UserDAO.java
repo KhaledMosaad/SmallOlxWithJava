@@ -19,7 +19,6 @@ public interface UserDAO {
     @Query("SELECT * FROM users WHERE email=:email AND password=:password")
     User findUser(String email,String password);
 
-
     @Transaction
     @Query("SELECT * FROM users")
     List<UserAndPosts> getUserPosts();

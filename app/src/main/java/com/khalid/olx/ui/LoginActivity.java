@@ -3,11 +3,13 @@ package com.khalid.olx.ui;
 import android.app.ActionBar;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -26,14 +28,34 @@ public class LoginActivity extends AppCompatActivity {
     private Button login,signup;
     private Switch remembermesw;
     private TextView remembertext;
-    String email;
-    String pass;
+
+    private String email;
+    private String pass;
+    private SharedPreferences.Editor sharedEditor;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
         initialize();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
+        sharedEditor= sharedPreferences.edit();
+        boolean isRememberMe=sharedPreferences.getBoolean("rememberMe",false);
+
+        remembermesw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                sharedEditor.putBoolean("rememberMe",isChecked);
+                sharedEditor.apply();
+            }
+        });
+        if(isRememberMe)
+        {
+            Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+            startActivity(intent);
+            finish();
+        }
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +71,6 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void logininitialize()
@@ -109,6 +130,8 @@ public class LoginActivity extends AppCompatActivity {
             else
             {
                 Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
+                intent.putExtra("email",email);
+                intent.putExtra("password",pass);
                 startActivity(intent);
                 finish();
             }

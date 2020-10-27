@@ -7,8 +7,11 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Post {
     @NonNull
-    @PrimaryKey
     public String email;
+
+
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
     public String name;
 
