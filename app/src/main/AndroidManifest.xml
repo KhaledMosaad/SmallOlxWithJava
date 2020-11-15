@@ -27,7 +27,7 @@
         </provider>
         <activity
             android:name=".ui.LoginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -41,7 +41,7 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.HomeActivity"/>
         <activity android:name=".ui.AddpostActivity"/>
-
+        <activity android:name=".ui.PostDetailsActivity"/>
     </application>
 
 </manifest>

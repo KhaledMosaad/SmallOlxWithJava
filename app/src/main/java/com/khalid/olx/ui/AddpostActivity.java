@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -53,10 +54,9 @@ public class AddpostActivity extends AppCompatActivity {
     private boolean mIsImageAdd =false;
     private String email;
     private Post addpost;
+    private String userPhone;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor sharedEditor;
-    private File mPhotoFile;
-    private Uri mUri;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -139,23 +139,6 @@ public class AddpostActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private void openMenuToChoose()
     {
         final CharSequence[] options={getString(R.string.open_camera),
@@ -197,10 +180,9 @@ public class AddpostActivity extends AppCompatActivity {
         }
         else
         {
-            Intent openGalleryIntent=new Intent(Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-            startActivityForResult(openGalleryIntent,OPEN_GALLERY_CODE);
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(intent,OPEN_GALLERY_CODE);
         }
     }
     private void openCamera() throws IOException {
@@ -215,15 +197,15 @@ public class AddpostActivity extends AppCompatActivity {
             // Ensure that there's a camera activity to handle the intent
             if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
                 // Create the File where the photo should go
-                mPhotoFile = null;
+                File photoFile = null;
                 try {
-                    mPhotoFile = createImageFile();
+                    photoFile = createImageFile();
                 } catch (IOException ex) {
                     // Error occurred while creating the File
                     return;
                 }
                 // Continue only if the File was successfully created
-                if (mPhotoFile != null) {
+                if (photoFile != null) {
                     Uri photoURI = FileProvider.getUriForFile(AddpostActivity.this,
                             BuildConfig.APPLICATION_ID + ".provider",
                             createImageFile());
@@ -258,7 +240,6 @@ public class AddpostActivity extends AppCompatActivity {
             try {
                 InputStream ims = new FileInputStream(file);
                 mImageView.setImageBitmap(BitmapFactory.decodeStream(ims));
-
             } catch (FileNotFoundException e) {
                 return;
             }
@@ -274,20 +255,20 @@ public class AddpostActivity extends AppCompatActivity {
                 mIsImageAdd=true;
             }
         }
-        else if(requestCode==OPEN_GALLERY_CODE)
-        {
-            if(resultCode==RESULT_OK) {
-                assert data != null;
-                Uri img = data.getData();
-                if (img != null) {
-                    mImagePath = img.toString();
-                    mImageView.setImageURI(img);
-                    mIsImageAdd = true;
-                }
-            }
-            else
-            {
-                Toast.makeText(this,"Please Select Photo",Toast.LENGTH_LONG).show();
+        else if (requestCode == OPEN_GALLERY_CODE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, 
+                    null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            mImagePath = cursor.getString(columnIndex);
+            cursor.close();
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(mImagePath));
+            if(mImageView!=null){
+                mIsImageAdd=true;
             }
         }
     }

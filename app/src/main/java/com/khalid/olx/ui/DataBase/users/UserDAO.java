@@ -23,6 +23,9 @@ public interface UserDAO {
     @Query("SELECT * FROM users")
     List<UserAndPosts> getUserPosts();
 
+    @Query("SELECT phone FROM users WHERE email=:email")
+    String getUserPhone(String email);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User user);
 

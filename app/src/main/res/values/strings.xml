@@ -24,4 +24,8 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="phone">Phone</string>
     <string name="no_post_right_now">No Post Right now</string>
+    <string name="search">Search</string>
+    <string name="save">Save</string>
+    <string name="favorite">Favorite</string>
+    <string name="profile">profile</string>
 </resources>

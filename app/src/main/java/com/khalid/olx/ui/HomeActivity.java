@@ -2,6 +2,7 @@ package com.khalid.olx.ui;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView postsRV;
     private FloatingActionButton floatingActionButton;
     private TextView nopost;
+    private Toolbar mToolbar;
     private List<Post> postList;
     private final static int ADD_POST_REQUEST_CODE = 100;
     private String email;
@@ -39,9 +41,17 @@ public class HomeActivity extends AppCompatActivity {
         postsRV.setLayoutManager(new LinearLayoutManager(this));
 
 
-       Intent getintent=getIntent();
-       email=getintent.getStringExtra("email");
-       password=getintent.getStringExtra("password");
+        mToolbar=findViewById(R.id.toolbar);
+        mToolbar.setTitle("Home");
+        mToolbar.inflateMenu(R.menu.menu_home_activity);
+        setOnClickManu();
+
+
+
+
+       Intent getIntent=getIntent();
+       email=getIntent.getStringExtra("email");
+       password=getIntent.getStringExtra("password");
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +62,24 @@ public class HomeActivity extends AppCompatActivity {
         });
         GetPostAsyncTask getPostAsyncTask=new GetPostAsyncTask();
         getPostAsyncTask.execute();
+    }
+
+    private void setOnClickManu() {
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId=(int) item.getItemId();
+                if(itemId==R.id.search_button_home)
+                {
+
+                }
+                else if(itemId==R.id.profile_icon)
+                {
+
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -83,7 +111,7 @@ public class HomeActivity extends AppCompatActivity {
             if(posts!=null&&posts.size()>0)
             {
                 nopost.setVisibility(View.GONE);
-                PostsAdabter postsAdabter=new PostsAdabter(posts);
+                PostsAdabter postsAdabter=new PostsAdabter(HomeActivity.this,posts);
                 postsRV.setAdapter(postsAdabter);
             }
             else

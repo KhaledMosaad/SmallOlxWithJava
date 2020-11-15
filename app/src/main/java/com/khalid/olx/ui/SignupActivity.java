@@ -117,7 +117,6 @@ public  class SignupActivity extends AppCompatActivity {
             user.password=password;
             user.phone=phone;
             user.photoPath= mImagePath;
-
             new UserAsyncTask().execute();
         }
     }

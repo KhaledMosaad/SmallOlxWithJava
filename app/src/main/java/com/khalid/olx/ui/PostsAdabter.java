@@ -1,7 +1,8 @@
 package com.khalid.olx.ui;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
-import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +20,12 @@ import java.util.List;
 
 public class PostsAdabter extends RecyclerView.Adapter<PostsAdabter.PostViewHolder> {
 
-    private final List<Post> postslist;
-    public PostsAdabter(List<Post> postlist){
-        this.postslist=postlist;
+    private final List<Post> mPostList;
+    private Context mContext;
+    public PostsAdabter(Context context,List<Post> postList){
+
+        mContext=context;
+        this.mPostList =postList;
     }
     @NonNull
     @Override
@@ -33,25 +37,33 @@ public class PostsAdabter extends RecyclerView.Adapter<PostsAdabter.PostViewHold
 
     @Override
     public void onBindViewHolder(@NonNull PostViewHolder holder,final int position) {
-        holder.price.setText((postslist.get(position).price+""));
-        holder.postName.setText(postslist.get(position).name);
+        holder.price.setText((mPostList.get(position).price+""));
+        holder.postName.setText(mPostList.get(position).name);
         Uri postimg;
-        if ( postslist.get(position).postImg != null) {
-             postimg = Uri.parse(Uri.decode(postslist.get(position).postImg));
+        if ( mPostList.get(position).postImg != null) {
+             postimg = Uri.parse(Uri.decode(mPostList.get(position).postImg));
             holder.postImage.setImageURI(postimg);
         }
 
         holder.holePost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO after create details page
+                Intent intent=new Intent(mContext,PostDetailsActivity.class);
+                intent.putExtra(PostDetailsActivity.GET_POST_IMAGE, mPostList.
+                        get(position).postImg);
+                intent.putExtra(PostDetailsActivity.GET_POST_NAME,mPostList.get(position).name);
+                intent.putExtra(PostDetailsActivity.GET_POST_PRICE,mPostList.get(position).price);
+                intent.putExtra(PostDetailsActivity.GET_POST_DETAILS,mPostList.get(position).details);
+                intent.putExtra(PostDetailsActivity.GET_POST_PHONE,mPostList.get(position).phone);
+
+               mContext.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return postslist.size();
+        return mPostList.size();
     }
 
     public static class PostViewHolder extends RecyclerView.ViewHolder{

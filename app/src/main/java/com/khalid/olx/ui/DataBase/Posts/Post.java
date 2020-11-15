@@ -11,11 +11,13 @@ public class Post {
 
 
     @PrimaryKey(autoGenerate = true)
-    public int id;
+    public long id;
 
     public String name;
 
     public double price;
+
+    public String phone;
 
     public String details;
 

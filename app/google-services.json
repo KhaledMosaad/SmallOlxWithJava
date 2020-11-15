@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "703337772946",
+    "firebase_url": "https://testfirebase-46da9.firebaseio.com",
+    "project_id": "testfirebase-46da9",
+    "storage_bucket": "testfirebase-46da9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703337772946:android:abdcc111a51a8c9d34f34b",
+        "android_client_info": {
+          "package_name": "com.khalid.olx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703337772946-obhcco3dgoqo7lv57bl2tkf4q0646foc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLuuBMeSWG125LbQfw5-wcFic89PtkgvM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703337772946-obhcco3dgoqo7lv57bl2tkf4q0646foc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
