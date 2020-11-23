@@ -48,6 +48,10 @@ public  class SignupActivity extends AppCompatActivity {
     private boolean mIsImageAdd =false;
     private User user;
     private File mPhotoFile;
+    public String mEmail;
+    private String mPassword;
+    private String mConfpassword;
+    private String mPhone;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,28 +86,28 @@ public  class SignupActivity extends AppCompatActivity {
 
     }
     void setSignup(){
-        final String email=emailedit.getText().toString();
-        final String password=passwordedit.getText().toString();
-        final String confpassword=confpasswordedit.getText().toString();
-        final String phone=phonerdit.getText().toString();
+        mEmail = emailedit.getText().toString();
+        mPassword = passwordedit.getText().toString();
+        mConfpassword = confpasswordedit.getText().toString();
+        mPhone = phonerdit.getText().toString();
 
-        if(TextUtils.isEmpty(email))
+        if(TextUtils.isEmpty(mEmail))
         {
             emailedit.setError("Please Enter Your Email");
         }
-        else if(TextUtils.isEmpty(password))
+        else if(TextUtils.isEmpty(mPassword))
         {
             passwordedit.setError("Please Enter Password");
         }
-        else if(TextUtils.isEmpty(confpassword))
+        else if(TextUtils.isEmpty(mConfpassword))
         {
             confpasswordedit.setError("Confirm Your Password");
         }
-        else if(!password.equals(confpassword))
+        else if(!mPassword.equals(mConfpassword))
         {
             confpasswordedit.setError("The Password not equal each other");
         }
-        else if(TextUtils.isEmpty(phone))
+        else if(TextUtils.isEmpty(mPhone))
         {
             phonerdit.setError("Please Enter Your phone number");
         }
@@ -113,9 +117,9 @@ public  class SignupActivity extends AppCompatActivity {
         }
         else {
             user=new User();
-            user.email=email;
-            user.password=password;
-            user.phone=phone;
+            user.email= mEmail;
+            user.password= mPassword;
+            user.phone= mPhone;
             user.photoPath= mImagePath;
             new UserAsyncTask().execute();
         }
@@ -210,11 +214,10 @@ public  class SignupActivity extends AppCompatActivity {
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
+                imageFileName,
+                ".jpg",
+                storageDir
         );
-        // Save a file: path for use with ACTION_VIEW intents
         mImagePath = image.getAbsolutePath();
         return image;
     }
@@ -222,7 +225,6 @@ public  class SignupActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TAKE_PHOTO_CODE && resultCode == RESULT_OK) {
-            // Show the thumbnail on ImageView
             Uri imageUri = Uri.parse(mImagePath);
             File file = new File(imageUri.getPath());
             try {

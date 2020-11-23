@@ -39,7 +39,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class AddpostActivity extends AppCompatActivity {
+public class AddPostActivity extends AppCompatActivity {
 
     private ImageView mImageView;
     private EditText name;
@@ -70,7 +70,7 @@ public class AddpostActivity extends AppCompatActivity {
         addbtn=findViewById(R.id.addpostbtnaddpost);
         sharedPreferences=getSharedPreferences("infomation",MODE_PRIVATE);
         sharedEditor=sharedPreferences.edit();
-        email=sharedPreferences.getString("Email","k");
+        email=new SignupActivity().mEmail;
         sharedEditor.apply();
         onClickListners();
     }
@@ -108,7 +108,7 @@ public class AddpostActivity extends AppCompatActivity {
         }
         else if(!mIsImageAdd)
         {
-            Toast.makeText(AddpostActivity.this,"Please Set a photo",Toast.LENGTH_LONG).show();
+            Toast.makeText(AddPostActivity.this,"Please Set a photo",Toast.LENGTH_LONG).show();
         }
         else {
            addpost=new Post();
@@ -132,7 +132,7 @@ public class AddpostActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            Toast.makeText(AddpostActivity.this,"Post add Successfully ",
+            Toast.makeText(AddPostActivity.this,"Post add Successfully ",
                     Toast.LENGTH_LONG).show();
             setResult(RESULT_OK);
             finish();
@@ -143,7 +143,7 @@ public class AddpostActivity extends AppCompatActivity {
     {
         final CharSequence[] options={getString(R.string.open_camera),
                 getString(R.string.open_Gallery),getString(R.string.cancel)};
-        AlertDialog.Builder alertDialog=new AlertDialog.Builder(AddpostActivity.this);
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(AddPostActivity.this);
         alertDialog.setTitle(getString(R.string.option_to_select));
         alertDialog.setItems(options,new DialogInterface.OnClickListener(){
 
@@ -168,10 +168,10 @@ public class AddpostActivity extends AppCompatActivity {
     }
     private void openGallery()
     {
-        if(ContextCompat.checkSelfPermission(AddpostActivity.this, Manifest.permission.
+        if(ContextCompat.checkSelfPermission(AddPostActivity.this, Manifest.permission.
                 READ_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED||ContextCompat.
-                checkSelfPermission(AddpostActivity.this,
+                checkSelfPermission(AddPostActivity.this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)!=
                 PackageManager.PERMISSION_GRANTED)
         {
@@ -186,7 +186,7 @@ public class AddpostActivity extends AppCompatActivity {
         }
     }
     private void openCamera() throws IOException {
-        if(ContextCompat.checkSelfPermission(AddpostActivity.this,Manifest.permission.CAMERA)!=
+        if(ContextCompat.checkSelfPermission(AddPostActivity.this,Manifest.permission.CAMERA)!=
                 PackageManager.PERMISSION_GRANTED)
         {
             requestPermissions(new String[]{Manifest.permission.CAMERA},CAMERA_CODE);
@@ -206,7 +206,7 @@ public class AddpostActivity extends AppCompatActivity {
                 }
                 // Continue only if the File was successfully created
                 if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(AddpostActivity.this,
+                    Uri photoURI = FileProvider.getUriForFile(AddPostActivity.this,
                             BuildConfig.APPLICATION_ID + ".provider",
                             createImageFile());
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
@@ -245,7 +245,7 @@ public class AddpostActivity extends AppCompatActivity {
             }
 
             // ScanFile so it will be appeared on Gallery
-            MediaScannerConnection.scanFile(AddpostActivity.this,
+            MediaScannerConnection.scanFile(AddPostActivity.this,
                     new String[]{imageUri.getPath()}, null,
                     new MediaScannerConnection.OnScanCompletedListener() {
                         public void onScanCompleted(String path, Uri uri) {

@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private RecyclerView postsRV;
     private FloatingActionButton floatingActionButton;
-    private TextView nopost;
+    private TextView noPost;
     private Toolbar mToolbar;
     private List<Post> postList;
     private final static int ADD_POST_REQUEST_CODE = 100;
@@ -37,14 +37,14 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_activity);
         postsRV=findViewById(R.id.postsRV);
         floatingActionButton=findViewById(R.id.addpostbtn);
-        nopost=findViewById(R.id.nopostid);
+        noPost =findViewById(R.id.nopostid);
         postsRV.setLayoutManager(new LinearLayoutManager(this));
 
 
         mToolbar=findViewById(R.id.toolbar);
         mToolbar.setTitle("Home");
         mToolbar.inflateMenu(R.menu.menu_home_activity);
-        setOnClickManu();
+        setOnClickMenu();
 
 
 
@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(HomeActivity.this,AddpostActivity.class);
+                Intent intent=new Intent(HomeActivity.this, AddPostActivity.class);
                 startActivityForResult(intent,ADD_POST_REQUEST_CODE);
             }
         });
@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         getPostAsyncTask.execute();
     }
 
-    private void setOnClickManu() {
+    private void setOnClickMenu() {
         mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -75,7 +75,9 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 else if(itemId==R.id.profile_icon)
                 {
-
+                    Intent intent=new Intent(HomeActivity.this,
+                            UserProfileActivity.class);
+                    startActivity(intent);
                 }
                 return true;
             }
@@ -110,13 +112,13 @@ public class HomeActivity extends AppCompatActivity {
             super.onPostExecute(posts);
             if(posts!=null&&posts.size()>0)
             {
-                nopost.setVisibility(View.GONE);
+                noPost.setVisibility(View.GONE);
                 PostsAdabter postsAdabter=new PostsAdabter(HomeActivity.this,posts);
                 postsRV.setAdapter(postsAdabter);
             }
             else
             {
-                nopost.setVisibility(View.VISIBLE);
+                noPost.setVisibility(View.VISIBLE);
             }
 
         }

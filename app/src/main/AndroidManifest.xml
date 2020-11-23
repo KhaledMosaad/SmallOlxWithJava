@@ -40,8 +40,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity android:name=".ui.HomeActivity"/>
-        <activity android:name=".ui.AddpostActivity"/>
+        <activity android:name=".ui.AddPostActivity"/>
         <activity android:name=".ui.PostDetailsActivity"/>
+        <activity android:name=".ui.UserProfileActivity"/>
     </application>
 
 </manifest>
