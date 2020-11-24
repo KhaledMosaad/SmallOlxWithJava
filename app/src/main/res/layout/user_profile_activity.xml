@@ -3,29 +3,41 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
+    android:background="@color/screen_background_color"
     >
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/profile_image"
         android:layout_margin="20dp"
+        android:layout_marginBottom="50dp"
         />
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/email_profile"
+        android:layout_marginBottom="50dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        android:textColor="@color/colorWhite"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/phone_profile"
+        android:layout_marginBottom="50dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
         />
     <Button
+        android:id="@+id/signoutbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corners"
         android:layout_margin="15dp"
-        android:id="@+id/signoutbtn"
-        />
+        android:text="@string/sign_out"
+        android:textAllCaps="false"
+        android:background="@drawable/rounded_corners" />
 
 </LinearLayout>

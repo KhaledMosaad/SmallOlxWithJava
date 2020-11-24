@@ -28,8 +28,8 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private List<Post> postList;
     private final static int ADD_POST_REQUEST_CODE = 100;
-    private String email;
-    private String password;
+//    private String email;
+//    private String password;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,9 +49,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-       Intent getIntent=getIntent();
-       email=getIntent.getStringExtra("email");
-       password=getIntent.getStringExtra("password");
+//       Intent getIntent=getIntent();
+//       email=getIntent.getStringExtra("email");
+//       password=getIntent.getStringExtra("password");
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

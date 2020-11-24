@@ -25,6 +25,7 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView phoneText;
     private Button signOutButton;
     private String mEmail;
+    private String mPassword;
     private SharedPreferences.Editor sharedEditor;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class UserProfileActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
         sharedEditor= sharedPreferences.edit();
         boolean isRememberMe=sharedPreferences.getBoolean("rememberMe",false);
+        mEmail=sharedPreferences.getString("email","k");
+        mPassword=sharedPreferences.getString("password","p");
         new AsyncUser().execute();
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,8 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 sharedEditor.putBoolean("rememberMe",false);
                 sharedEditor.commit(); // commit() with main thread , apply() with another thread
                 startActivity(intent);
-                //
-                //finish();
+                finish();
             }
         });
     }
@@ -58,16 +60,16 @@ public class UserProfileActivity extends AppCompatActivity {
         protected User doInBackground(Void... voids) {
             return PostsDatabaseClint.getInstance(getApplicationContext()).
                     getUserManegerDataBase().userDAO().
-                    findUserByEmail(mEmail);
+                    findUser(mEmail,mPassword);
         }
 
         @Override
         protected void onPostExecute(User user) {
             super.onPostExecute(user);
-            //Uri image=Uri.parse(Uri.decode(user.photoPath));
-            //profileImage.setImageURI(image);
-            //emailText.setText(user.email);
-            //phoneText.setText(user.phone);
+            Uri image=Uri.parse(Uri.decode(user.photoPath));
+            profileImage.setImageURI(image);
+            emailText.setText(user.email);
+            phoneText.setText(user.phone);
         }
     }
 }

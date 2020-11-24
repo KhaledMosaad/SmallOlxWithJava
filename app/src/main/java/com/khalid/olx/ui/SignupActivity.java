@@ -3,6 +3,7 @@ package com.khalid.olx.ui;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
@@ -83,7 +84,6 @@ public  class SignupActivity extends AppCompatActivity {
                 openMenuToChoose();
             }
         });
-
     }
     void setSignup(){
         mEmail = emailedit.getText().toString();
@@ -121,6 +121,11 @@ public  class SignupActivity extends AppCompatActivity {
             user.password= mPassword;
             user.phone= mPhone;
             user.photoPath= mImagePath;
+            SharedPreferences shared=getSharedPreferences("users",MODE_PRIVATE);
+            SharedPreferences.Editor editor=shared.edit();
+            editor.putString("email",mEmail);
+            editor.putString("password",mPassword);
+            editor.apply();
             new UserAsyncTask().execute();
         }
     }

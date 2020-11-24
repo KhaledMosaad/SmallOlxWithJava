@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("users", MODE_PRIVATE);
         sharedEditor= sharedPreferences.edit();
         boolean isRememberMe=sharedPreferences.getBoolean("rememberMe",false);
-
         remembermesw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -132,6 +131,11 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent=new Intent(LoginActivity.this,HomeActivity.class);
                 intent.putExtra("email",email);
                 intent.putExtra("password",pass);
+                SharedPreferences shared=getSharedPreferences("users",MODE_PRIVATE);
+                SharedPreferences.Editor editor=shared.edit();
+                editor.putString("email",email);
+                editor.putString("password",pass);
+                editor.apply();
                 startActivity(intent);
                 finish();
             }

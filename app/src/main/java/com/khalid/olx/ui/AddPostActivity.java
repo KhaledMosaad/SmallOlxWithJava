@@ -68,9 +68,9 @@ public class AddPostActivity extends AppCompatActivity {
         price=findViewById(R.id.priceaddpost);
         details=findViewById(R.id.detailsaddpost);
         addbtn=findViewById(R.id.addpostbtnaddpost);
-        sharedPreferences=getSharedPreferences("infomation",MODE_PRIVATE);
+        sharedPreferences=getSharedPreferences("users",MODE_PRIVATE);
         sharedEditor=sharedPreferences.edit();
-        email=new SignupActivity().mEmail;
+        email=sharedPreferences.getString("email","k");
         sharedEditor.apply();
         onClickListners();
     }
