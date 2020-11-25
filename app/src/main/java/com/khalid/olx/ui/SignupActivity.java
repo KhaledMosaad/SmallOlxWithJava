@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public  class SignupActivity extends AppCompatActivity {
     private ImageView mImageView;
@@ -53,6 +55,16 @@ public  class SignupActivity extends AppCompatActivity {
     private String mPassword;
     private String mConfpassword;
     private String mPhone;
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^" +
+                    "(?=.*[0-9])" +         //at least 1 digit
+                    //"(?=.*[a-z])" +         //at least 1 lower case letter
+                    //"(?=.*[A-Z])" +         //at least 1 upper case letter
+                    "(?=.*[a-zA-Z])" +      //any letter
+                    //"(?=.*[@#$%^&+=])" +    //at least 1 special character
+                    "(?=\\S+$)" +           //no white spaces
+                    ".+" +               //at least 4 characters
+                    "$");
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,18 +98,26 @@ public  class SignupActivity extends AppCompatActivity {
         });
     }
     void setSignup(){
-        mEmail = emailedit.getText().toString();
-        mPassword = passwordedit.getText().toString();
-        mConfpassword = confpasswordedit.getText().toString();
-        mPhone = phonerdit.getText().toString();
+        mEmail = emailedit.getText().toString().trim();
+        mPassword = passwordedit.getText().toString().trim();
+        mConfpassword = confpasswordedit.getText().toString().trim();
+        mPhone = phonerdit.getText().toString().trim();
 
         if(TextUtils.isEmpty(mEmail))
         {
             emailedit.setError("Please Enter Your Email");
         }
+        else if(!Patterns.EMAIL_ADDRESS.matcher(mEmail).matches())
+        {
+            emailedit.setError("This is Not Valid Email");
+        }
         else if(TextUtils.isEmpty(mPassword))
         {
             passwordedit.setError("Please Enter Password");
+        }
+        else if(mPassword.length()<8)
+        {
+            passwordedit.setError("Password must be of length 8 or more");
         }
         else if(TextUtils.isEmpty(mConfpassword))
         {
